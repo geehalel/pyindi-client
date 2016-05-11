@@ -55,6 +55,7 @@ This is mandatory. This class is instantiated once, and afer defining server hos
 with their properties is printed on the console. 
 
 .. code:: python
+
   # for logging
   import sys
   import time
@@ -164,7 +165,7 @@ with their properties is printed on the console.
   indiclient.disconnectServer()
 
 
-See the `examples`_ for some more simple demos of using **pyindiclient**.
+See the `examples`_ for more simple demos of using **pyindi-client**.
 
 See the `interface file`_ for an insight of what is wrapped and how.
 
@@ -174,7 +175,7 @@ For documentation on the methods of INDI Client API, refer to the `INDI C++ API 
 Notes
 -----
 
-To be continued.
+
 
 License
 =======
@@ -187,7 +188,7 @@ License
 .. _SWIG: http://www.swig.org/
 .. _a release: https://sourceforge.net/projects/pyindi-client/files/releases
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
-.. _examples: https://sourceforge.net/p/pyindi-client/code/pip/pyindi-client/examples
+.. _examples: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/examples
 
 .. _ GNU General Public License v3 or later (GPLv3+): http://www.gnu.org/licenses/gpl.html
-.. _interface file: https://sourceforge.net/p/pyindi-client/code/pip/pyindi-client/indiclientpython.i
+.. _interface file: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/indiclientpython.i
