@@ -13,7 +13,15 @@
 %include "std_except.i"
 
 %feature("director") BaseClient;
-
+%feature("director:except") {
+    if( $error != NULL ) {
+        PyObject *ptype, *pvalue, *ptraceback;
+        PyErr_Fetch( &ptype, &pvalue, &ptraceback );
+        PyErr_Restore( ptype, pvalue, ptraceback );
+        PyErr_Print();
+        Py_Exit(1);
+    }
+} 
 //Warning 451
 %typemap(varin) const char * {
    SWIG_Error(SWIG_AttributeError,"Variable $symname is read-only.");
