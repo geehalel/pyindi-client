@@ -22,7 +22,7 @@ stelSocket=None
 stelClients={}
 
 killed = False
-def to_le(n, size):
+def to_be(n, size):
     b=bytearray(size)
     i=size-1
     while i >= 0:
@@ -30,9 +30,22 @@ def to_le(n, size):
         n = n >> 8
         i -= 1
     return b
-def from_le(b):
+def from_be(b):
     n=0
     for i in range(len(b)):
+        n = (n << 8) + b[i]
+    return n
+def to_le(n, size):
+    b=bytearray(size)
+    i=0
+    while i < size:
+        b[i] = n % 256
+        n = n >> 8
+        i += 1
+    return b
+def from_le(b):
+    n=0
+    for i in range(len(b)-1, -1, -1):
         n = (n << 8) + b[i]
     return n
 
@@ -80,7 +93,7 @@ class StelClient():
         return p
     def performWrite(self):
         global stelClients
-        logging.info('Socket '+str(self.socket.fileno()) + ' will write')
+        #logging.info('Socket '+str(self.socket.fileno()) + ' will write')
         sent=self.socket.send(self.writebuf[0:self.tosend])
         if sent<=0:
             logging.info('Socket '+str(self.socket.fileno()) + ' is away')
@@ -104,19 +117,25 @@ class StelClient():
         msg=bytearray(24)
         msg[0:2]=to_le(24, 2)
         msg[2:4]=to_le(0, 2)
-        try:
-            tstamp=calendar.timegm(time.strptime(utc, '%Y-%m-%dT%H:%M:%S'))
-        except:
-            tstamp=0
+        if (utc!=''):
+            try:
+                tstamp=calendar.timegm(time.strptime(utc, '%Y-%m-%dT%H:%M:%S'))
+            except:
+                tstamp=0
+        else:
+            # Simulator does not send its UTC time, and timestamp are emptied somewhere
+            tstamp=int(time.time())
         msg[4:12]=to_le(tstamp, 8)
-        msg[12:16]=to_le(int(math.floor(rajnow * (4294967296.0/86400))), 4)
-        msg[16:20]=to_le(int(math.floor(decjnow * (4294967296.0/(360*3600.0)))), 4)
+        msg[12:16]=to_le(int(math.floor(rajnow * (4294967296.0/24.0))), 4)
+        msg[16:20]=to_le(int(math.floor(decjnow * (4294967296.0/(360.0)))), 4)
         msg[20:24]=to_le(status, 4)
         self.sendMsg(msg)
     def disconnect(self):
-        self.socket.shutdown(socket.SHUT_RDWR)
-        self.socket.close()
-
+        try:
+            self.socket.shutdown(socket.SHUT_RDWR)
+            self.socket.close()
+        except:
+            pass
 # The IndiClient class which manages connections to the indi server
 # and events from the telescope device.
 # Keeps track (through python global variables) of the connection/deconnection
@@ -168,11 +187,13 @@ class IndiClient(PyIndi.BaseClient):
             if (nvp.name.decode() =="EQUATORIAL_EOD_COORD"):
                 indiTelescopeRAJNOW=nvp[0].value
                 indiTelescopeDECJNOW=nvp[1].value
+                #self.logger.info ("RA/DEC Timestamp "+str(nvp.timestamp))
     def newText(self, tvp):
         global indiTelescopeTIMEUTC
         if (tvp.device.decode() == self.telescope):
             if (tvp.name.decode() =="TIME_UTC"):
                 indiTelescopeTIMEUTC=tvp[0].text
+                self.logger.info ("UTC Time "+str(tvp[0].text))
     def newLight(self, lvp):
         pass
     def newMessage(self, d, m):
@@ -227,19 +248,19 @@ try:
             logging.info('Connected to indiserver@'+indiclient.getHost()+':'+str(indiclient.getPort())+', watching "'+inditelescope+'" device')
         if (isIndiTelescopeConnected):
             for s in stelClients:
-                stelClients[s].sendEqCoords(indiTelescopeTIMEUTC, indiTelescopeRAJNOW, indiTelescopeDECJNOW, status+1)
-            logging.info('RA='+str(indiTelescopeRAJNOW)+', DEC='+str(indiTelescopeDECJNOW))
-        logging.info('Perform step')
+                stelClients[s].sendEqCoords(indiTelescopeTIMEUTC, indiTelescopeRAJNOW, indiTelescopeDECJNOW, status)
+            #logging.info('RA='+str(indiTelescopeRAJNOW)+', DEC='+str(indiTelescopeDECJNOW))
+        #logging.info('Perform step')
         # perform one step 
         readers=[stelSocket] + [s for s in stelClients]
         writers=[s for s in stelClients if stelClients[s].hasToWrite()]
         ready_to_read, ready_to_write, in_error = select.select(readers,writers,[], 0.5)
         for r in ready_to_read:
             if r == stelSocket:
-                logging.info('New Stellarium client')
                 news, newa = stelSocket.accept()
                 news.setblocking(0)
                 stelClients[news] = StelClient(news, newa)
+                logging.info('New Stellarium client on port '+str(newa))
             else:
                 stelClients[r].performRead()
         for r in ready_to_write:
