@@ -1,6 +1,6 @@
 # A python server for the stellarium planetarium program
 # it implements the stellarium Telescope Control plugin protocol.
-import signal, os, sys, logging, time, calendar, math
+import signal, os, sys, logging, time, calendar, math, traceback
 import socket, select
 
 import PyIndi
@@ -15,6 +15,7 @@ isIndiTelescopeConnected=False
 indiTelescopeRAJNOW=0.0
 indiTelescopeDECJNOW=0.0
 indiTelescopeTIMEUTC=''
+gotoQueue=[]
 
 stelport=10001
 stelSocket=None
@@ -62,12 +63,14 @@ class StelClient():
     def hasToWrite(self):
         return (self.tosend > 0)
     def performRead(self):
-        logging.info('Socket '+str(self.socket.fileno()) + ' has to read')
+        #logging.info('Socket '+str(self.socket.fileno()) + ' has to read')
         buf=bytearray(120-self.recv)
         nrecv=self.socket.recv_into(buf, 120-self.recv)
-        logging.info('Socket '+str(self.socket.fileno()) + 'read: '+buf)
+        #logging.info('Socket '+str(self.socket.fileno()) + 'read: '+str(buf))
         if (nrecv <= 0):
-            logging.info('Socket '+str(self.socket.fileno()) + ' reads nothing')
+            logging.info('Client '+str(self.socket.fileno()) + ' is away')
+            self.disconnect()
+            stelClients.pop(self.socket)
             return
         self.readbuf[self.recv:self.recv+nrecv]=buf
         self.recv+=nrecv
@@ -76,6 +79,7 @@ class StelClient():
             self.readbuf=self.readbuf[last:]
             self.recv-=last
     def datareceived(self):
+        global gotoQueue
         p=0
         while p < self.recv-2:
             psize=from_le(self.readbuf[p:p+2]) 
@@ -84,9 +88,16 @@ class StelClient():
             ptype=from_le(self.readbuf[p+2:p+4])
             if ptype == 0:
                 micros=from_le(self.readbuf[p+4:p+12])
+                if abs((micros/1000000.0) - int(time.time())) > 60.0:
+                    logging.warning('Client '+str(self.socket.fileno())+' clock differs for more than one minute: '+str(int(micros/1000000.0))+'/'+str(int(time.time())))
                 targetraint=from_le(self.readbuf[p+12:p+16])
                 targetdecint=from_le(self.readbuf[p+16:p+20])
-                logging.info('Goto to '+str(targetraint) + '--'+str(targetdecint))
+                if (targetdecint > (4294967296 / 2)):
+                    targetdecint = - (4294967296 - targetdecint)
+                targetra=(targetraint * 24.0) / 4294967296.0
+                targetdec=(targetdecint * 360.0) / 4294967296.0
+                logging.info('Queuing goto (ra, dec)=('+str(targetra) + ', '+str(targetdec)+')')
+                gotoQueue.append((targetra, targetdec))
                 p+=psize
             else:
                 p+=psize
@@ -96,7 +107,7 @@ class StelClient():
         #logging.info('Socket '+str(self.socket.fileno()) + ' will write')
         sent=self.socket.send(self.writebuf[0:self.tosend])
         if sent<=0:
-            logging.info('Socket '+str(self.socket.fileno()) + ' is away')
+            logging.info('Client '+str(self.socket.fileno()) + ' is away')
             self.disconnect()
             stelClients.pop(self.socket)
             return
@@ -135,7 +146,7 @@ class StelClient():
             self.socket.shutdown(socket.SHUT_RDWR)
             self.socket.close()
         except:
-            pass
+            traceback.print_exc()
 # The IndiClient class which manages connections to the indi server
 # and events from the telescope device.
 # Keeps track (through python global variables) of the connection/deconnection
@@ -153,13 +164,13 @@ class IndiClient(PyIndi.BaseClient):
     # the python GIL before calling them from C++  and releases it at the end.
     # So it is safe to modify global python variables here.
     def newDevice(self, d):
-        self.logger.info("new device " + d.getDeviceName())
+        #self.logger.info("new device " + d.getDeviceName())
         if (d.getDeviceName() != self.telescope):
              self.logger.info("Receiving "+ d.getDeviceName() + " Device...")
         self.tdevice=d
     def newProperty(self, p):
-        global autoconnect, isIndiTelescopeConnected
-        self.logger.info("new property "+ p.getName() + " for device "+ p.getDeviceName())
+        global autoconnect, isIndiTelescopeConnected, indiTelescopeRAJNOW, indiTelescopeDECJNOW
+        #self.logger.info("new property "+ p.getName() + " for device "+ p.getDeviceName())
         if (p.getDeviceName() == self.telescope):
             if (p.getName()=="CONNECTION"):
                 if not(self.tdevice.isConnected()) and autoconnect:
@@ -168,13 +179,18 @@ class IndiClient(PyIndi.BaseClient):
                 if self.tdevice.isConnected():
                     self.logger.info("Found connected device "+ p.getDeviceName())
                     isIndiTelescopeConnected=True
+            if (p.getName()=="EQUATORIAL_EOD_COORD"):
+                nvp=p.getNumber()
+                indiTelescopeRAJNOW=nvp[0].value
+                indiTelescopeDECJNOW=nvp[1].value
+                self.logger.info("Got JNow Eq. coords for "+ p.getDeviceName()+': (ra, dec)=('+str(indiTelescopeRAJNOW)+', '+str(indiTelescopeDECJNOW)+')')
     def removeProperty(self, p):
         pass
     def newBLOB(self, bp):
         pass
     def newSwitch(self, svp):
         global isIndiTelescopeConnected
-        self.logger.info ("new Switch "+ svp.name.decode() + " for device "+ svp.device.decode())
+        #self.logger.info ("new Switch "+ svp.name.decode() + " for device "+ svp.device.decode())
         if (svp.device.decode() == self.telescope):
             if (svp.name.decode()=="CONNECTION"):        
                 if (svp[0].s==PyIndi.ISS_ON):
@@ -247,9 +263,22 @@ try:
             indiclient.waitServer()
             logging.info('Connected to indiserver@'+indiclient.getHost()+':'+str(indiclient.getPort())+', watching "'+inditelescope+'" device')
         if (isIndiTelescopeConnected):
+            #logging.info('RA='+str(indiTelescopeRAJNOW)+', DEC='+str(indiTelescopeDECJNOW))
             for s in stelClients:
                 stelClients[s].sendEqCoords(indiTelescopeTIMEUTC, indiTelescopeRAJNOW, indiTelescopeDECJNOW, status)
-            #logging.info('RA='+str(indiTelescopeRAJNOW)+', DEC='+str(indiTelescopeDECJNOW))
+            if len(gotoQueue) > 0:
+                logging.info('Sending goto (ra, dec)='+str(gotoQueue[0]))
+                d=indiclient.getDevice(inditelescope)
+                oncoordset=d.getSwitch('ON_COORD_SET')
+                oncoordset[0].s=PyIndi.ISS_ON
+                oncoordset[1].s=PyIndi.ISS_OFF
+                oncoordset[2].s=PyIndi.ISS_OFF
+                indiclient.sendNewSwitch(oncoordset)
+                eqeodcoords=d.getNumber('EQUATORIAL_EOD_COORD')
+                eqeodcoords[0].value=gotoQueue[0][0]
+                eqeodcoords[1].value=gotoQueue[0][1]
+                gotoQueue=gotoQueue[1:]
+                indiclient.sendNewNumber(eqeodcoords)
         #logging.info('Perform step')
         # perform one step 
         readers=[stelSocket] + [s for s in stelClients]
@@ -260,18 +289,22 @@ try:
                 news, newa = stelSocket.accept()
                 news.setblocking(0)
                 stelClients[news] = StelClient(news, newa)
-                logging.info('New Stellarium client on port '+str(newa))
+                logging.info('New Stellarium client '+str(news.fileno())+' on port '+str(newa))
             else:
                 stelClients[r].performRead()
         for r in ready_to_write:
-            stelClients[r].performWrite()
+            if (r in stelClients.keys()):
+                stelClients[r].performWrite()
         for r in in_error:
             logging.info('Lost Stellarium client '+ str(r.fileno()))
-            stelClients[r].disconnect()
-            stelClients.pop(r)
+            if (r in stelClients.keys()):
+                stelClients[r].disconnect()
+                stelClients.pop(r)
         time.sleep(0.5)
-except Exception as e:
-    print('Exception '+str(e))
+except KeyboardInterrupt:
+    logging.info('Bye')
+else:
+    traceback.print_exc()
 
 stelSocket.shutdown(socket.SHUT_RDWR)
 stelSocket.close()
