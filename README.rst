@@ -180,7 +180,7 @@ Notes
 License
 =======
 
-**pyindi-client**  code is free software under the ` GNU General Public License v3 or later (GPLv3+)`_.
+**pyindi-client**  code is free software under the `GNU General Public License v3 or later (GPLv3+)`_.
 
 --------------
 
