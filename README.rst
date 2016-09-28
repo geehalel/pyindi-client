@@ -1,5 +1,5 @@
 pyindi-client
-========
+=============
 
 :version: 0.1.0
 
@@ -190,5 +190,5 @@ License
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
 .. _examples: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/examples
 
-.. _ GNU General Public License v3 or later (GPLv3+): http://www.gnu.org/licenses/gpl.html
+.. _GNU General Public License v3 or later (GPLv3+): http://www.gnu.org/licenses/gpl.html
 .. _interface file: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/indiclientpython.i

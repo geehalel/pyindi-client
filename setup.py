@@ -13,13 +13,21 @@ except:
     from distutils.command.install import install
     from distutils import setup, Extension
 
+march=""
+try:
+    import sysconfig
+    march=sysconfig.get_config_var('MULTIARCH')
+except:
+    import sys
+    march=getattr(sys, 'implementation', sys)._multiarch
+
 ###
 
-VERSION = '0.1.0a'
+VERSION = '0.1.0a1'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a
-libindisearchpaths=['/usr/lib', '/usr/lib64', '/lib', '/lib64']
+libindisearchpaths=['/usr/lib/'+march, '/usr/lib', '/usr/lib64', '/lib', '/lib64']
 
 libindipath=''
 
@@ -101,4 +109,4 @@ setup(version=VERSION,
           "Topic :: Scientific/Engineering :: Astronomy"
           ],
       )
-readme.close()
+#readme.close()
