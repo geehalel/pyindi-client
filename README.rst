@@ -9,7 +9,7 @@ using `SWIG`_.
 Installation
 ============
 
-Use pip (recommended, but not yet)
+Use pip 
 
 .. code:: sh
 
