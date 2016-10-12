@@ -22,6 +22,9 @@ Alternatively download `a release`_, extract it and run
     python setup.py install
 
 The file `setup.cfg` contains configuration options (mainly concerning `libindi` installation path).
+The file setup.py searchs for the libindiclient.a library in some predefined directories.
+If not found, the script fails. Locate this library (try `locate lindiclient.a` from the command line)
+and add its path to the `libindisearchpaths` variable in the setup script.
 
 Dependencies
 ============
@@ -51,7 +54,7 @@ Getting Started
 
 
 In the following simple example, an INDI client class is defined giving the implementation of the pure virtual INDI client functions.
-This is mandatory. This class is instantiated once, and afer defining server host and port in this object, a list of devices together
+This is mandatory. This class is instantiated once, and after defining server host and port in this object, a list of devices together
 with their properties is printed on the console. 
 
 .. code:: python
