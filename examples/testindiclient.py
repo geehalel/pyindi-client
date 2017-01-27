@@ -38,13 +38,13 @@ class IndiClient(PyIndi.BaseClient):
     def newBLOB(self, bp):
         self.logger.info("new BLOB "+ bp.name.decode())
     def newSwitch(self, svp):
-        self.logger.info ("new Switch "+ svp.name.decode() + " for device "+ svp.device.decode())
+        self.logger.info ("new Switch "+ svp.name + " for device "+ svp.device)
     def newNumber(self, nvp):
-        self.logger.info("new Number "+ nvp.name.decode() + " for device "+ nvp.device.decode())
+        self.logger.info("new Number "+ nvp.name + " for device "+ nvp.device)
     def newText(self, tvp):
-        self.logger.info("new Text "+ tvp.name.decode() + " for device "+ tvp.device.decode())
+        self.logger.info("new Text "+ tvp.name + " for device "+ tvp.device)
     def newLight(self, lvp):
-        self.logger.info("new Light "+ lvp.name.decode() + " for device "+ lvp.device.decode())
+        self.logger.info("new Light "+ lvp.name + " for device "+ lvp.device)
     def newMessage(self, d, m):
         self.logger.info("new Message "+ d.messageQueue(m).decode())
     def serverConnected(self):
