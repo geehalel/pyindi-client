@@ -354,12 +354,12 @@ def process_command(buf, indiclient, logger):
                 mode=b'0'
                 if (p[0].s==PyIndi.ISS_ON) or (p[1].s==PyIndi.ISS_ON) or\
                    (p[1].s==PyIndi.ISS_ON) or (p[2].s==PyIndi.ISS_ON):
-                    more=b'2'
+                    mode=b'2'
                 reply+=mode+b'#'
                 i+=1
             else:
                 mode=buf[1]
-                if (mode==2) or (mode==3): # EQ/PEC tracking (no Alt/Az)
+                if (mode==ord('2')) or (mode==ord('3')): # EQ/PEC tracking (no Alt/Az)
                     if p[0].s == PyIndi.ISS_OFF:
                         p[0].s=PyIndi.ISS_ON
                         p[1].s=PyIndi.ISS_OFF
