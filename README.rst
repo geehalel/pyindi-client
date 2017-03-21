@@ -1,7 +1,7 @@
 pyindi-client
 =============
 
-:version: 0.1.0
+:version: 0.2.0
 
 An `INDI`_ Client Python API, auto-generated from the official C++ API
 using `SWIG`_.
@@ -22,6 +22,7 @@ Alternatively download `a release`_, extract it and run
     python setup.py install
 
 The file `setup.cfg` contains configuration options (mainly concerning `libindi` installation path).
+Edit `setup.cfg` if you use a libindi version < 1.4.1 (02/2017).
 The file setup.py searchs for the libindiclient.a library in some predefined directories.
 If not found, the script fails. Locate this library (try `locate lindiclient.a` from the command line)
 and add its path to the `libindisearchpaths` variable in the setup script.

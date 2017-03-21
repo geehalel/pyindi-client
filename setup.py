@@ -23,7 +23,7 @@ except:
 
 ###
 
-VERSION = '0.1.0a1'
+VERSION = '0.2.0'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a
@@ -100,7 +100,7 @@ setup(version=VERSION,
           "Programming Language :: Python",
           "Programming Language :: Python :: 2",
           "Programming Language :: Python :: 3",
-          "Development Status :: 2 - Pre-Alpha",
+          "Development Status :: 3 - Alpha",
           "Environment :: Other Environment",
           "Intended Audience :: Developers",
           "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
