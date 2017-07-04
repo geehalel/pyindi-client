@@ -1,7 +1,7 @@
 pyindi-client
 =============
 
-:version: 0.2.0
+:version: 0.2.1
 
 An `INDI`_ Client Python API, auto-generated from the official C++ API
 using `SWIG`_.
