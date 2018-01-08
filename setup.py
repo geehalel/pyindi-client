@@ -23,7 +23,7 @@ except:
 
 ###
 
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a
@@ -45,6 +45,7 @@ if libindipath=='':
 pyindi_module = Extension('_PyIndi',
                           sources=['indiclientpython.i'],
                           language='c++',
+                          extra_compile_args=[ '-std=c++11'],
                           extra_objects = [join(libindipath, 'libindiclient.a')]
 )
 
