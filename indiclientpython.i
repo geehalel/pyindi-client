@@ -11,6 +11,7 @@
 
 %include "std_vector.i"
 %include "std_except.i"
+%include "std_string.i"
 
 %feature("director") BaseClient;
 %feature("director:except") {
@@ -93,4 +94,17 @@ B_ONLY
     result = PyByteArray_FromStringAndSize((const char*) $self->blob, $self->size);
     return result;
   }
- }
+ };
+
+%extend INDI::BaseClient {
+  %typemap(in) (char *data, long len) {
+    $1 = PyBytes_AsString($input);
+    $2 = PyBytes_Size($input);
+  }
+
+
+  public:
+    void sendOneBlobFromBuffer(const char *name, const char *type, char *data, long len) {
+      $self->sendOneBlob(name, len, type, (void*)(data));
+    }
+  }

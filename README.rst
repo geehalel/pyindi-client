@@ -1,7 +1,7 @@
 pyindi-client
 =============
 
-:version: 0.2.2
+:version: 0.2.3
 
 An `INDI`_ Client Python API, auto-generated from the official C++ API
 using `SWIG`_.
@@ -108,7 +108,7 @@ with their properties is printed on the console.
       def newLight(self, lvp):
           self.logger.info("new Light "+ lvp.name.decode() + " for device "+ lvp.device.decode())
       def newMessage(self, d, m):
-          self.logger.info("new Message "+ d.messageQueue(m).decode())
+          self.logger.info("new Message "+ d.messageQueue(m))
       def serverConnected(self):
           self.logger.info("Server connected ("+self.getHost()+":"+str(self.getPort())+")")
       def serverDisconnected(self, code):

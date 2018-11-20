@@ -46,7 +46,7 @@ class IndiClient(PyIndi.BaseClient):
     def newLight(self, lvp):
         self.logger.info("new Light "+ lvp.name + " for device "+ lvp.device)
     def newMessage(self, d, m):
-        self.logger.info("new Message "+ d.messageQueue(m).decode())
+        self.logger.info("new Message "+ d.messageQueue(m))
     def serverConnected(self):
         self.logger.info("Server connected ("+self.getHost()+":"+str(self.getPort())+")")
     def serverDisconnected(self, code):

@@ -7,6 +7,7 @@ See other instructions in the `svn tree`_.
 Releases
 ========
 
+- v0.2.3: Corrections suggested by Georg Viehoever and Marco Gulino (`StarQuew`_).
 - v0.2.2: Use std=c++11 flag for compiling the swig wrapper.
 - v0.2.1: Use default string wrapping in swig.
 - v0.2.0: Changed libraries flag in setup.cfg for libindi 1.4.1. Edit setup.cfg if you use an older libindi version.
@@ -15,3 +16,4 @@ Releases
 
 
 .. _svn tree: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/
+.. _StarQuew: https://github.com/GuLinux/StarQuew/

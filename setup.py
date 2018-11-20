@@ -23,11 +23,11 @@ except:
 
 ###
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a
-libindisearchpaths=['/usr/lib/'+march, '/usr/lib', '/usr/lib64', '/lib', '/lib64']
+libindisearchpaths=['/usr/lib/'+march, '/usr/lib', '/usr/lib64', '/lib', '/lib64', '/usr/local/lib']
 
 libindipath=''
 
