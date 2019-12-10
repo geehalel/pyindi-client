@@ -63,7 +63,7 @@ class CustomInstall(install):
         
 #readme = open(join(root_dir, 'README.rst'))
 descr="""
-An INDI_ Client Python API, auto-generated from the official C++ API using SWIG.
+An INDI Client Python API, auto-generated from the official C++ API using SWIG.
 
 Installation
 
