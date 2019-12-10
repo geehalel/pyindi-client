@@ -12,6 +12,7 @@
 %include "std_vector.i"
 %include "std_except.i"
 %include "std_string.i"
+%include "stdint.i"
 
 %feature("director") BaseClient;
 %feature("director:except") {
