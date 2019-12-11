@@ -191,7 +191,7 @@ License
 .. _INDI: http://indilib.org/
 .. _SWIG: http://www.swig.org/
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
-.. _examples: https://github.com/geehalel/pyindi-client/examples
+.. _examples: https://github.com/geehalel/pyindi-client/tree/master/examples
 
 .. _GNU General Public License v3 or later (GPLv3+): http://www.gnu.org/licenses/gpl.html
-.. _interface file: https://github.com/geehalel/pyindi-client/indiclientpython.i
+.. _interface file: https://github.com/geehalel/pyindi-client/blob/master/indiclientpython.i
