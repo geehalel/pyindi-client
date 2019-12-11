@@ -15,7 +15,7 @@ Use pip
 
     pip install pyindi-client
 
-Alternatively download `a release`_, extract it and run
+Alternatively download a zip archive (use commits history to get a previous release), extract it and run
 
 .. code:: sh
 
@@ -190,9 +190,8 @@ License
 
 .. _INDI: http://indilib.org/
 .. _SWIG: http://www.swig.org/
-.. _a release: https://sourceforge.net/projects/pyindi-client/files/releases
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
-.. _examples: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/examples
+.. _examples: https://github.com/geehalel/pyindi-client/examples
 
 .. _GNU General Public License v3 or later (GPLv3+): http://www.gnu.org/licenses/gpl.html
-.. _interface file: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/indiclientpython.i
+.. _interface file: https://github.com/geehalel/pyindi-client/indiclientpython.i
