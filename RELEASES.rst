@@ -7,6 +7,7 @@ See other instructions in the `svn tree`_.
 Releases
 ========
 
+- v0.2.5: Fix package build with newer setuptools.
 - v0.2.4: Corrections suggested by Radek Kaczorek (include stdind.i).
 - v0.2.3: Corrections suggested by Georg Viehoever and Marco Gulino (`StarQuew`_).
 - v0.2.2: Use std=c++11 flag for compiling the swig wrapper.

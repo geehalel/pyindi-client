@@ -23,7 +23,7 @@ except:
 
 ###
 
-VERSION = '0.2.4'
+VERSION = '0.2.5'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a
@@ -54,13 +54,13 @@ pyindi_module = Extension('_PyIndi',
 class CustomBuild(build):
     def run(self):
         self.run_command('build_ext')
-        build.run(self)
+        super().run()
 
 class CustomInstall(install):
     def run(self):
         self.run_command('build_ext')
-        self.do_egg_install()
-        
+        super().run()
+
 #readme = open(join(root_dir, 'README.rst'))
 descr="""
 An INDI Client Python API, auto-generated from the official C++ API using SWIG.
