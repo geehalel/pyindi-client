@@ -40,6 +40,8 @@ For the above installation to work, you need to have installed from your distrib
     apt-get install python-dev
     apt-get install libindi-dev
     apt-get install swig
+    apt-get install libcfitsio-dev
+    apt-get install libnova-dev
 
 - On a Fedora-like distribution, you may use
 
@@ -49,6 +51,8 @@ For the above installation to work, you need to have installed from your distrib
     dnf install python-devel
     dnf install libindi-devel
     dnf install swig
+    dnf install libcfitsio-dev
+    dnf install libnova-dev
     
 Getting Started
 ===============
