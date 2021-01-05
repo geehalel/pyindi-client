@@ -7,6 +7,7 @@ See other instructions in the `svn tree`_.
 Releases
 ========
 
+- v0.2.6: `indibase/refactoring`_: INDI::Property::apply and ::define are ignored (varargs following optional arg issue in swig).
 - v0.2.5: Fix package build with newer setuptools.
 - v0.2.4: Corrections suggested by Radek Kaczorek (include stdind.i).
 - v0.2.3: Corrections suggested by Georg Viehoever and Marco Gulino (`StarQuew`_).
@@ -19,3 +20,4 @@ Releases
 
 .. _svn tree: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/
 .. _StarQuew: https://github.com/GuLinux/StarQuew/
+.. _indibase/refactoring: https://github.com/indilib/indi/pull/1302
