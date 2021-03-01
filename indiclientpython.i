@@ -28,24 +28,11 @@
 %template(BaseDeviceVector) std::vector<INDI::BaseDevice *>;
 %template(PropertyVector) std::vector<INDI::Property *>;
 
-/* swig does not like optional args (format = nullptr) followed with varargs (... considered as non optional) */
+// 'apply' conflicts with a built-in name in python
+// the apply method is currently only used on drivers side - ignore it
 %ignore INDI::Property::apply;
-%ignore INDI::Property::define;
-/* Missng semicolon */
-#define ATTRIBUTE_FORMAT_PRINTF(A,B) ; 
-/* Macros defined in indiutility.h but other indiutility functions not present in indibaseclient library */
-template <typename T>
-static inline T *getPtrHelper(T *ptr) { return ptr; }
 
-template <typename Wrapper>
-static inline typename Wrapper::element_type *getPtrHelper(const Wrapper &p) { return p.get(); }
-
-#define DECLARE_PRIVATE(Class) \
-    inline Class##Private* d_func() { return reinterpret_cast<Class##Private *>(getPtrHelper(d_ptr)); } \
-    inline const Class##Private* d_func() const { return reinterpret_cast<const Class##Private *>(getPtrHelper(d_ptr)); } \
-    friend class Class##Private;
-/* end Macros */
-
+%include <indimacros.h>
 %include <indibasetypes.h>
 %include <indibase.h>
 %include <indiapi.h>
