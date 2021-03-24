@@ -28,9 +28,11 @@
 %template(BaseDeviceVector) std::vector<INDI::BaseDevice *>;
 %template(PropertyVector) std::vector<INDI::Property *>;
 
-// 'apply' conflicts with a built-in name in python
-// the apply method is currently only used on drivers side - ignore it
-%ignore INDI::Property::apply;
+%ignore INDI::PropertyView::apply;
+%ignore INDI::PropertyView::define;
+%ignore INDI::PropertyView::vapply;
+%ignore INDI::PropertyView::vdefine;
+
 
 %include <indimacros.h>
 %include <indibasetypes.h>
@@ -38,6 +40,13 @@
 %include <indiapi.h>
 %include <baseclient.h>
 %include <basedevice.h>
+%include <indiwidgettraits.h>
+%include <indipropertyview.h>
+%template(ITextPropertyview) INDI::PropertyView<IText>;
+%template(INumberPropertyview) INDI::PropertyView<INumber>;
+%template(ISwitchPropertyview) INDI::PropertyView<ISwitch>;
+%template(ILightPropertyview) INDI::PropertyView<ILight>;
+%template(IBLOBPropertyview) INDI::PropertyView<IBLOB>;
 %include <indiproperty.h>
 
 typedef enum {

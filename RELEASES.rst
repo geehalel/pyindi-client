@@ -1,12 +1,7 @@
-Instructions
-============
-
-Extract the archive and run `python setup.py install` as root from the extracted directory.
-See other instructions in the `svn tree`_.
-
 Releases
 ========
 
+- v0.2.7: Fix for INDI v1.8.9 (tested with commitb6d4094) 
 - v0.2.6: `indibase/refactoring`_: INDI::Property::apply and ::define are ignored (varargs following optional arg issue in swig).
 - v0.2.5: Fix package build with newer setuptools.
 - v0.2.4: Corrections suggested by Radek Kaczorek (include stdind.i).
@@ -21,3 +16,4 @@ Releases
 .. _svn tree: https://sourceforge.net/p/pyindi-client/code/HEAD/tree/trunk/pip/pyindi-client/
 .. _StarQuew: https://github.com/GuLinux/StarQuew/
 .. _indibase/refactoring: https://github.com/indilib/indi/pull/1302
+.. _commitb6d4094: https://github.com/indilib/indi/commit/b6d409495fdaac454ddc0b63582783d88ca89675
