@@ -32,6 +32,8 @@
 %ignore INDI::PropertyView::define;
 %ignore INDI::PropertyView::vapply;
 %ignore INDI::PropertyView::vdefine;
+%ignore INDI::Property::apply;
+%ignore INDI::Property::define;
 
 
 %include <indimacros.h>
