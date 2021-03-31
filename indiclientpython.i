@@ -4,7 +4,16 @@
 #include <indiapi.h>
 #include <baseclient.h>
 #include <basedevice.h>
+
+
 #include <indiproperty.h>
+
+#include <indipropertybasic.h>
+#include <indipropertytext.h>
+#include <indipropertynumber.h>
+#include <indipropertyswitch.h>
+#include <indipropertylight.h>
+#include <indipropertyblob.h>
 
 #include <stdexcept>
 %}
@@ -28,14 +37,6 @@
 %template(BaseDeviceVector) std::vector<INDI::BaseDevice *>;
 %template(PropertyVector) std::vector<INDI::Property *>;
 
-%ignore INDI::PropertyView::apply;
-%ignore INDI::PropertyView::define;
-%ignore INDI::PropertyView::vapply;
-%ignore INDI::PropertyView::vdefine;
-%ignore INDI::Property::apply;
-%ignore INDI::Property::define;
-
-
 %include <indimacros.h>
 %include <indibasetypes.h>
 %include <indibase.h>
@@ -43,13 +44,65 @@
 %include <baseclient.h>
 %include <basedevice.h>
 %include <indiwidgettraits.h>
+
+// INDI::PropertyView (low-level decorator for IXXXPropertyView)
+// INDI::WidgetView (low-level decorator for IXXX)
+%ignore INDI::PropertyView::apply;
+%ignore INDI::PropertyView::define;
+%ignore INDI::PropertyView::vapply;
+%ignore INDI::PropertyView::vdefine;
+
 %include <indipropertyview.h>
-%template(ITextPropertyview) INDI::PropertyView<IText>;
-%template(INumberPropertyview) INDI::PropertyView<INumber>;
-%template(ISwitchPropertyview) INDI::PropertyView<ISwitch>;
-%template(ILightPropertyview) INDI::PropertyView<ILight>;
-%template(IBLOBPropertyview) INDI::PropertyView<IBLOB>;
+
+%template(PropertyViewText)   INDI::PropertyView<IText>;
+%template(PropertyViewNumber) INDI::PropertyView<INumber>;
+%template(PropertyViewSwitch) INDI::PropertyView<ISwitch>;
+%template(PropertyViewLight)  INDI::PropertyView<ILight>;
+%template(PropertyViewBlob)   INDI::PropertyView<IBLOB>;
+
+%template(WidgetViewText)     INDI::WidgetView<IText>;
+%template(WidgetViewNumber)   INDI::WidgetView<INumber>;
+%template(WidgetViewSwitch)   INDI::WidgetView<ISwitch>;
+%template(WidgetViewLight)    INDI::WidgetView<ILight>;
+%template(WidgetViewBlob)     INDI::WidgetView<IBLOB>;
+
+// INDI::Property - generic container for INDI properties
+%ignore INDI::Property::apply;
+%ignore INDI::Property::define;
+%ignore INDI::Property::vapply;
+%ignore INDI::Property::vdefine;
+
 %include <indiproperty.h>
+
+// INDI::Property Typed -typed container for INDI properties
+%ignore INDI::PropertyBasic::apply;
+%ignore INDI::PropertyBasic::define;
+%ignore INDI::PropertyBasic::vapply;
+%ignore INDI::PropertyBasic::vdefine;
+
+%include <indipropertybasic.h>
+
+%extend INDI::PropertyBasic {
+  const INDI::WidgetView<T> * __getitem__(int index) {
+    return $self->at(index);
+  }
+
+  int __len__() {
+    return $self->size();
+  }
+}
+
+%template(PropertyBasicText)   INDI::PropertyBasic<IText>;
+%template(PropertyBasicNumber) INDI::PropertyBasic<INumber>;
+%template(PropertyBasicSwitch) INDI::PropertyBasic<ISwitch>;
+%template(PropertyBasicLight)  INDI::PropertyBasic<ILight>;
+%template(PropertyBasicBlob)   INDI::PropertyBasic<IBLOB>;
+
+%include <indipropertytext.h>
+%include <indipropertynumber.h>
+%include <indipropertyswitch.h>
+%include <indipropertylight.h>
+%include <indipropertyblob.h>
 
 typedef enum {
 B_NEVER=0,
