@@ -23,7 +23,7 @@ except:
 
 ###
 
-VERSION = '0.2.7a'
+VERSION = '0.2.7b'
 root_dir = abspath(dirname(__file__))
 
 # Add search paths here for libindiclient.a

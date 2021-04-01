@@ -1,6 +1,7 @@
 Releases
 ========
 
+- v0.2.7b: High-level INDI Property support (indi-core v1.9.0 dev).
 - v0.2.7a: Fix for INDI v1.8.9 on raspberry (ignore INDI::Property::apply and ::define) 
 - v0.2.7: Fix for INDI v1.8.9 (tested with commitb6d4094) 
 - v0.2.6: `indibase/refactoring`_: INDI::Property::apply and ::define are ignored (varargs following optional arg issue in swig).
