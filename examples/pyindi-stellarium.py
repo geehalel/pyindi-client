@@ -191,23 +191,23 @@ class IndiClient(PyIndi.BaseClient):
     def newSwitch(self, svp):
         global isIndiTelescopeConnected
         #self.logger.info ("new Switch "+ svp.name.decode() + " for device "+ svp.device.decode())
-        if (svp.device.decode() == self.telescope):
-            if (svp.name.decode()=="CONNECTION"):        
+        if (svp.device == self.telescope):
+            if (svp.name=="CONNECTION"):
                 if (svp[0].s==PyIndi.ISS_ON):
                     isIndiTelescopeConnected=True
                 if (svp[1].s==PyIndi.ISS_ON):
                     isIndiTelescopeConnected=False
     def newNumber(self, nvp):
         global indiTelescopeRAJNOW, indiTelescopeDECJNOW
-        if (nvp.device.decode() == self.telescope):
-            if (nvp.name.decode() =="EQUATORIAL_EOD_COORD"):
+        if (nvp.device == self.telescope):
+            if (nvp.name =="EQUATORIAL_EOD_COORD"):
                 indiTelescopeRAJNOW=nvp[0].value
                 indiTelescopeDECJNOW=nvp[1].value
                 #self.logger.info ("RA/DEC Timestamp "+str(nvp.timestamp))
     def newText(self, tvp):
         global indiTelescopeTIMEUTC
-        if (tvp.device.decode() == self.telescope):
-            if (tvp.name.decode() =="TIME_UTC"):
+        if (tvp.device == self.telescope):
+            if (tvp.name =="TIME_UTC"):
                 indiTelescopeTIMEUTC=tvp[0].text
                 self.logger.info ("UTC Time "+str(tvp[0].text))
     def newLight(self, lvp):
