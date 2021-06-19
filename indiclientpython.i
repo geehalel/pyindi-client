@@ -54,6 +54,26 @@
 
 %include <indipropertyview.h>
 
+%exception {
+    try {
+        $action
+    } catch (std::out_of_range &e) {
+      SWIG_exception(SWIG_IndexError, "Index out of bounds");
+    }
+}
+%extend INDI::PropertyView {
+  const INDI::WidgetView<T> * __getitem__(int index) {
+    if (index >= $self->count()) {
+      throw std::out_of_range("Index out of bounds");
+    }
+    return $self->at(index);
+  }
+
+  int __len__() {
+    return $self->count();
+  }
+}
+
 %template(PropertyViewText)   INDI::PropertyView<IText>;
 %template(PropertyViewNumber) INDI::PropertyView<INumber>;
 %template(PropertyViewSwitch) INDI::PropertyView<ISwitch>;
@@ -177,4 +197,14 @@ B_ONLY
     void sendOneBlobFromBuffer(const char *name, const char *type, char *data, long len) {
       $self->sendOneBlob(name, len, type, (void*)(data));
     }
-  }
+    /* TODO(chripell): is there a way to use %implicitconv? */
+    void sendNewText(INDI::PropertyView<IText> * pp) {
+      $self->sendNewText(static_cast<ITextVectorProperty *>(pp));
+    }
+    void sendNewNumber(INDI::PropertyView<INumber> * pp) {
+      $self->sendNewNumber(static_cast<INumberVectorProperty *>(pp));
+    }
+    void sendNewSwitch(INDI::PropertyView<ISwitch> * pp) {
+      $self->sendNewSwitch(static_cast<ISwitchVectorProperty *>(pp));
+    }
+}
