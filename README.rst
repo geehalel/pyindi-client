@@ -1,3 +1,5 @@
+THIS IS GOING TO BE MOVED TO THE `INDI github`_. DO NOT USE ANY MORE.
+
 pyindi-client
 =============
 
@@ -192,6 +194,7 @@ License
 
 --------------
 
+.. _INDI github: https://github.com/indilib/indi
 .. _INDI: http://indilib.org/
 .. _SWIG: http://www.swig.org/
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
