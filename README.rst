@@ -1,4 +1,6 @@
-THIS IS GOING TO BE MOVED TO THE `INDI github`_. DO NOT USE ANY MORE.
+.. attention::
+   Because I do not want loosing time staying in sync with main Indi branch development commits, I had to transfer ownership of this   work to Indi maintainers.
+   ** PYINDI-CLIENT HAS MOVED TO THIS `INDI repository`_. DO NOT USE MY REPO ANY MORE. **
 
 pyindi-client
 =============
@@ -195,6 +197,7 @@ License
 --------------
 
 .. _INDI github: https://github.com/indilib/indi
+.. _INDI repository: https://github.com/indilib/pyindi-client
 .. _INDI: http://indilib.org/
 .. _SWIG: http://www.swig.org/
 .. _INDI C++ API documentation: http://www.indilib.org/api/index.html
