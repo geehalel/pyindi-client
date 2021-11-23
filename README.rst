@@ -1,6 +1,9 @@
-.. attention::
-   Because I do not want loosing time staying in sync with main Indi branch development commits, I had to transfer ownership of this   work to Indi maintainers.
-   ** PYINDI-CLIENT HAS MOVED TO THIS `INDI repository`_. DO NOT USE MY REPO ANY MORE. **
+=======
+WARNING
+=======
+Because I do not want loosing time staying in sync with main Indi branch development commits, I had to transfer ownership of this work to Indi maintainers.
+   
+**PYINDI-CLIENT HAS MOVED TO THIS `INDI repository`_. DO NOT USE MY REPO ANY MORE.**
 
 pyindi-client
 =============
